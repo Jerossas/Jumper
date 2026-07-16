@@ -3,6 +3,10 @@ package com.dunno;
 import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Graphics2D;
+import java.awt.Graphics;
+import java.awt.Toolkit;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -17,6 +21,8 @@ public class GamePanel extends JPanel implements Runnable {
 	private volatile boolean running;
 	private volatile boolean gameOver;
 	private volatile boolean isPaused;
+
+	private Image doubleBufferedImage;
 
 	public GamePanel() {
 		
@@ -71,9 +77,9 @@ public class GamePanel extends JPanel implements Runnable {
 
 		while(running) {
 			
-			// TODO: Update game state
-			// TODO: Render game objects
-			// TODO: Paint objects
+			gameUpdate();
+			gameRender();
+			paintScreen();
 
 			System.out.println("Game is running!");
 			
@@ -117,5 +123,57 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 
 		System.exit(0);
+	}
+
+	private void gameUpdate() {
+
+		if(!gameOver && !isPaused) {
+
+			// TODO: Update game state
+		}
+	}
+
+	private void gameRender() {
+
+		if(doubleBufferedImage == null) {
+
+			doubleBufferedImage = createImage(PANEL_WIDTH, PANEL_HEIGHT);
+
+			if(doubleBufferedImage == null) {
+				System.out.println("Double Buffered Image is null");
+				return;
+			}
+
+			Graphics2D doubleBufferedGraphics = (Graphics2D) doubleBufferedImage.getGraphics();
+			
+			doubleBufferedGraphics.setColor(Color.WHITE);
+			doubleBufferedGraphics.fillRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
+
+			// TODO: Draw game state
+			
+			if(gameOver) {
+				// TODO: Draw game over message
+			}
+		}
+	}
+
+	private void paintScreen() {
+
+		Graphics gamePanelGraphics;
+
+		try {
+
+			gamePanelGraphics = this.getGraphics();
+
+			if((gamePanelGraphics != null) && (doubleBufferedImage != null)) {
+
+				gamePanelGraphics.drawImage(doubleBufferedImage, 0, 0, null);
+				Toolkit.getDefaultToolkit().sync();
+				gamePanelGraphics.dispose();
+			}
+		} catch(Exception e) {
+
+			System.out.println("Graphics context error: " + e);
+		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.dunno;
 
 import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.Color;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -9,11 +11,18 @@ public class GamePanel extends JPanel implements Runnable {
 	private Thread animator;
 	private long period = 16 * 1_000_000L; // Represents the time for each frame. In this case 60 FPS
 
+	private static final int PANEL_WIDTH = 500;
+	private static final int PANEL_HEIGHT = 400;
 
 	private volatile boolean running;
 
 	public GamePanel() {
 		
+		setBackground(Color.WHITE);
+		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+
+		setFocusable(true);
+		requestFocus();
 	}
 
 	@Override

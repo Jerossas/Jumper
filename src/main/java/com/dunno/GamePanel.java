@@ -15,6 +15,8 @@ public class GamePanel extends JPanel implements Runnable {
 	private static final int PANEL_HEIGHT = 400;
 
 	private volatile boolean running;
+	private volatile boolean gameOver;
+	private volatile boolean isPaused;
 
 	public GamePanel() {
 		
@@ -38,6 +40,21 @@ public class GamePanel extends JPanel implements Runnable {
 			animator = new Thread(this);
 			animator.start();
 		}
+	}
+
+	public void stopGame() {
+
+		running = false;
+	}
+
+	public void pauseGame() {
+		
+		isPaused = true;
+	}
+
+	public void resumeGame() {
+
+		isPaused = false;
 	}
 
 	@Override
